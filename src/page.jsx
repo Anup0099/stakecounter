@@ -49,6 +49,7 @@ const Page = () => {
   const [cardano, setCardano] = useState(true);
   const [polka, setPolka] = useState(false);
   const [kusama, setKusama] = useState(false);
+  const [startIndex, setStartIndex] = useState(0);
   const [initial, setInitial] = useState(true);
   const [stakeData, setStakeData] = useState([]);
   useEffect(() => {
@@ -106,62 +107,73 @@ const Page = () => {
           Kusama
         </Button>
       </div>
-      <div>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>S.No.</StyledTableCell>
-                <StyledTableCell align="left">Pool</StyledTableCell>
-                <StyledTableCell align="left">Stake/size</StyledTableCell>
-                <StyledTableCell align="left">Saturation</StyledTableCell>
-                <StyledTableCell align="left">Blocks</StyledTableCell>
-                <StyledTableCell align="left">Pledge</StyledTableCell>
-                <StyledTableCell align="left">Delegators</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {stakeData?.map((row, index) => (
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                    {index + 1}
-                  </StyledTableCell>
-                  <StyledTableCell align="left">{row.name}</StyledTableCell>
-                  <StyledTableCell align="left">
-                    {(row.stake / 1000000000000).toFixed(2)}M₳
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    <div className="progress">
-                      <div
-                        className="progressbar"
-                        style={{
-                          width: `${row.saturation}%`,
-                        }}
-                      >
-                        {(row.saturation * 100).toFixed(2)}%
-                      </div>
-                    </div>
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {row.blocks_epoch}
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {Math.abs(row.pledge / 10000000000)}k
-                  </StyledTableCell>
-                  <StyledTableCell align="left">
-                    {row.delegators}
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </div>
-      <div className="table_page">
-        <Stack spacing={2}>
-          <Pagination count={10} showFirstButton showLastButton />
-        </Stack>
-      </div>
+
+      {cardano && (
+        <div>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>S.No.</StyledTableCell>
+                  <StyledTableCell align="left">Pool</StyledTableCell>
+                  <StyledTableCell align="left">Stake/size</StyledTableCell>
+                  <StyledTableCell align="left">Saturation</StyledTableCell>
+                  <StyledTableCell align="left">Blocks</StyledTableCell>
+                  <StyledTableCell align="left">Pledge</StyledTableCell>
+                  <StyledTableCell align="left">Delegators</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {stakeData
+                  ?.slice(startIndex, startIndex + 10)
+                  .map((row, index) => (
+                    <StyledTableRow key={row.name}>
+                      <StyledTableCell component="th" scope="row">
+                        {startIndex + index + 1}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">{row.name}</StyledTableCell>
+                      <StyledTableCell align="left">
+                        {(row.stake / 1000000000000).toFixed(2)}M₳
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        <div className="progress">
+                          <div
+                            className="progressbar"
+                            style={{
+                              width: `${row.saturation * 100}%`,
+                            }}
+                          >
+                            {(row.saturation * 100).toFixed(2)}%
+                          </div>
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.blocks_epoch}
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {Math.abs(row.pledge / 10000000000)}k
+                      </StyledTableCell>
+                      <StyledTableCell align="left">
+                        {row.delegators}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div className="table_page">
+            <Pagination
+              count={Math.ceil(stakeData.length / 10)}
+              onChange={(e, page) => setStartIndex((page - 1) * 10)}
+              color="primary"
+              showFirstButton
+              showLastButton
+            />
+          </div>
+        </div>
+      )}
+      {polka && <div style={{ color: "white",textAlign:"center",marginTop:"4rem" }}>No Data Found</div>}
+      {kusama && <div style={{ color: "white",textAlign:"center",marginTop:"4rem" }}>No Data Found</div>}
     </div>
   );
 };

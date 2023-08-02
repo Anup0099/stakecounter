@@ -1,5 +1,6 @@
 import React from "react";
 import Table from "./page.jsx";
+import './App.css'
 function App() {
   return (
     <div className="App">
