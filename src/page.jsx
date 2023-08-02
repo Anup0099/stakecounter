@@ -11,7 +11,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -32,18 +31,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-
-function createData(id, calories, fat, carbs, protein, pledge, delegators) {
-  return { id, calories, fat, carbs, protein, pledge, delegators };
-}
-
-const rows = [
-  createData(1, 159, 6.0, 24, 4.0, 34, 76),
-  createData(2, 237, 9.0, 37, 4.3),
-  createData(3, 262, 16.0, 24, 6.0),
-  createData(4, 305, 3.7, 67, 4.3),
-  createData(5, 356, 16.0, 49, 3.9),
-];
 
 const Page = () => {
   const [cardano, setCardano] = useState(true);
